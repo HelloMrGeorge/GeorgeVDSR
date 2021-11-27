@@ -27,7 +27,7 @@ class VDSRscaler:
 
         ilr = self.tsTen(im)
         X = torch.zeros(*ilr.shape)
-        for i in range(3):
+        for i in range(ilr.shape[0]):
             X_Y = self.model(ilr[i].reshape(1, 1, *ilr[i].shape))
             X[i] = X_Y.reshape(*X[i].shape)
 
@@ -38,10 +38,11 @@ class VDSRscaler:
         X = ilr + X
         del ilr
         sample = self.tsImg(X.apply_(crop))
+        # sample = self.tsImg(X) #未做crop处理
         sample.save(f'{path[:-4]}_new.png')
 
 if __name__ == '__main__':
     with torch.no_grad():
         scaler = VDSRscaler()
-        scaler.scale('sample/77845097_p0.jpg')
+        scaler.scale('sample/sample.jpg')
     
